@@ -36,37 +36,18 @@ import org.springframework.web.bind.annotation.GetMapping;
         return ResponseEntity.ok(orders);
     }
 
-    // 주문 하기 - Request / Response Transaction
+    // Pack 주문 하기
     @PostMapping("/order")
     public ResponseEntity<Order> orderPlace(@RequestBody Order order) {
 
-        Payment payment = new Payment();
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String dateStr = format.format(Calendar.getInstance().getTime());
+        order.setOrderTime(dateStr);
+        order.setOrderStatus("주문중");
+        Order orders = orderRepository.save(order);
 
-        payment.setOrderId(order.getId());
-        payment.setOrderStatus("ORDER");
-        payment.setOrderPackType(order.getPackType());
-        payment.setOrderPackQty(order.getPackQty());
-        payment.setOrderPrice(order.getPrice());
-        payment.setCarName(order.getCarName());
-        payment.setCarNumber(order.getCarNumber());
-        payment.setPhoneNumber(order.getPhoneNumber());
-
-        // Request / Response Transaction
-        boolean bRet = OrderApplication.applicationContext.getBean(PaymentService.class).pay(payment);
-   
-        if (bRet) {
-            System.out.println("$$$$$ 주문이 완료되었습니다 $$$$$$");
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String dateStr = format.format(Calendar.getInstance().getTime());
-            order.setOrderTime(dateStr);
-            order.setOrderStatus("주문 완료");
-            orderRepository.save(order);
-
-        } else {
-            System.out.println("$$$$$ 주문이 실패하였습니다 $$$$$$");
-            order.setOrderStatus("주문 실패");
-        }
-        return ResponseEntity.ok(order);
+        System.out.println("$$$$$ orderPlace  $$$$$");
+        return ResponseEntity.ok(orders);
     }    
 
     // Pack 주문 취소 하기

@@ -1,6 +1,8 @@
 package chargingstation;
 import javax.persistence.*;
 import org.springframework.beans.BeanUtils;
+import chargingstation.external.Payment;
+import chargingstation.external.PaymentService;
 
 @Entity
 @Table(name="Order_table")
@@ -26,9 +28,31 @@ public class Order {
     // 주문 실행 - Request / Response Transaction
     @PostPersist
     public void onPostPersist(){
+        Payment payment = new Payment();
+
+        payment.setOrderId(this.id);
+        payment.setOrderStatus("ORDER");
+        payment.setOrderPackType(this.packType);
+        payment.setOrderPackQty(this.packQty);
+        payment.setOrderPrice(this.price);
+        payment.setCarName(this.carName);
+        payment.setCarNumber(this.carNumber);
+        payment.setPhoneNumber(this.phoneNumber);
+
+
+        boolean bRet = OrderApplication.applicationContext.getBean(PaymentService.class).pay(payment);
 
         OrderPlaced orderPlaced = new OrderPlaced();
-        BeanUtils.copyProperties(this, orderPlaced); 
+        BeanUtils.copyProperties(this, orderPlaced);       
+
+        if (bRet) {
+        	orderPlaced.setOrderStatus("ORDER_PLACED");
+            System.out.println("$$$$$ 주문이 완료되었습니다 $$$$$$");
+        } else {
+            orderPlaced.setOrderStatus("ORDER_FAILED");
+            System.out.println("$$$$$ 주문이 실패하였습니다 $$$$$$");
+        }  
+
         orderPlaced.saveJsonToPvc(orderPlaced.getOrderStatus(), orderPlaced.toJson());
     }
 
