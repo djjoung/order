@@ -26,15 +26,18 @@ public class PolicyHandler{
 
         System.out.println("\n\n$$$$$ listener UpdateOrder : " + mountCompleted.toJson() + "\n\n");
 
-        Order order = orderRepository.findById(mountCompleted.getOrderId()).orElseThrow(null);
-        if (order != null){
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String dateStr = format.format(Calendar.getInstance().getTime());
+        java.util.Optional<Order> optionalOrder= orderRepository.findById(mountCompleted.getOrderId());
+        if (optionalOrder.isPresent()){
+            Order order = optionalOrder.get();
+            if (order != null){
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateStr = format.format(Calendar.getInstance().getTime());
 
-            order.setOrderTime(dateStr);
-            order.setOrderStatus("MOUNT_COMPLETED");
-            orderRepository.save(order);
-            System.out.println("$$$$$ KAKAO Message : PACK MOUNT가 완료 되었습니다. PhoneNumber : [" + order.getPhoneNumber()+ "] $$$$$");
+                order.setOrderTime(dateStr);
+                order.setOrderStatus("MOUNT_COMPLETED");
+                orderRepository.save(order);
+                System.out.println("$$$$$ KAKAO Message : PACK MOUNT가 완료 되었습니다. PhoneNumber : [" + order.getPhoneNumber()+ "] $$$$$");
+            }
         }
     }
 
