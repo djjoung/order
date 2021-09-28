@@ -114,7 +114,7 @@ phases:
           apiVersion: autoscaling/v2beta2
           kind: HorizontalPodAutoscaler
           metadata:
-            name: reservation-hpa
+            name: order-hpa
           spec:
             scaleTargetRef:
               apiVersion: apps/v1
