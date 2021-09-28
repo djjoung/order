@@ -24,3 +24,4 @@ src/main/java/chargingstation/._OrderPlaced.java
 src/main/java/chargingstation/._OrderRepository.java
 src/main/java/chargingstation/._PolicyHandler.java
 src/main/java/chargingstation/.DS_Store
+._.gitignore
