@@ -7,10 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import chargingstation.external.Payment;
-import chargingstation.external.PaymentService;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,7 +35,6 @@ import org.springframework.web.bind.annotation.GetMapping;
     // Pack 주문 하기
     @PostMapping("/order")
     public ResponseEntity<Order> orderPlace(@RequestBody Order order) {
-
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String dateStr = format.format(Calendar.getInstance().getTime());
         order.setOrderTime(dateStr);
