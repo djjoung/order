@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    _PROJECT_NAME: "chargingstation-order"
+    _PROJECT_NAME: "user16-chargingstation-order"
     _POD_NAME: "order" # low case character
 
 phases:
